@@ -6,7 +6,7 @@
 /*   By: kradoste <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/27 15:59:36 by kradoste          #+#    #+#             */
-/*   Updated: 2018/05/06 16:04:41 by kradoste         ###   ########.fr       */
+/*   Updated: 2018/05/08 17:04:46 by kradoste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	g_size = 2;
 int	g_col = 0;
 int	g_row = 0;
 
-static int	error_checker(char *c, int x, int *size)
+static int	error_checker(char *c, int x, int *size, int *nutt_term)
 {
 	if (c[x])
 	{
@@ -32,12 +32,16 @@ static int	error_checker(char *c, int x, int *size)
 				*size = (x % 5) + 1;
 	}
 	else
-		if (x != 20)
+	{
+		if (x == 19)
 			return (0);
+		if (x == 20)
+			*nutt_term = 1;
+	}
 	return (1);
 }
 
-static int	*valid_tetrimino(char *c, int *size)
+static int	*valid_tetrimino(char *c, int *size, int *nutt_term)
 {
 	int		x;
 	int		link;
@@ -50,7 +54,7 @@ static int	*valid_tetrimino(char *c, int *size)
 	link = 0;
 	x = -1;
 	while (++x < 21)
-		if (!error_checker(c, x, size))
+		if (!error_checker(c, x, size, nutt_term))
 			return (NULL);
 		else if (c[x] == '#')
 		{
@@ -65,7 +69,7 @@ static int	*valid_tetrimino(char *c, int *size)
 	return (figure);
 }
 
-static int	**tetri_separator(char *filename, int **tetriminos)
+static int	**tetri_separator(char *filename, int **tetriminos, int *nutt_term)
 {
 	int		file;
 	char	buf[21];
@@ -80,7 +84,7 @@ static int	**tetri_separator(char *filename, int **tetriminos)
 	{
 		size = 4;
 		y = 0;
-		if (!(tetriminos[g_pieces] = valid_tetrimino(buf, &size)))
+		if (!(tetriminos[g_pieces] = valid_tetrimino(buf, &size, nutt_term)))
 			return (NULL);
 		while (y < 4)
 			tetriminos[g_pieces][y++] -= (size - 1);
@@ -114,6 +118,7 @@ int			main(int argc, char **argv)
 {
 	int		**tetriminos;
 	int		x;
+	int		nutt_term;
 
 	if (argc == 1 || argc > 2)
 		ft_putstr("usage: fillit input_file\n");
@@ -121,9 +126,11 @@ int			main(int argc, char **argv)
 	{
 		tetriminos = (int **)malloc(sizeof(int *) * 26 + 1);
 		x = -1;
+		nutt_term = 0;
 		while (tetriminos[++x])
 			tetriminos[x] = malloc(sizeof(int) * 5);
-		if (!(tetriminos = tetri_separator(argv[1], tetriminos)))
+		if (!(tetriminos = tetri_separator(argv[1], tetriminos,
+&nutt_term)) || nutt_term != 1)
 		{
 			write(1, "error\n", 6);
 			return (0);
