@@ -1,8 +1,6 @@
 # Fillit
 This is an algorithms program that can solve up to 26 tetriminos.  
-
 `make re` to compile  
-
 usage: ./fillit test_file
 
 # Test Format
@@ -13,12 +11,12 @@ usage: ./fillit test_file
 > If file doesn't follow these standards program should output an error.
 
 file example:  
-.##.
-##..
-....
-....
+.##.  
+##..  
+....  
+....  
 
-....
-....
-##..
-##..
+....  
+....  
+##..  
+##..  
