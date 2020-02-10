@@ -1,7 +1,7 @@
 # Fillit
 This is an algorithms program that can solve up to 26 tetriminos.  
 `make re` to compile  
-usage: ./fillit test_file
+`usage: ./fillit test_file`
 
 ## Rules
 - Tetriminos have to be inside a square.
